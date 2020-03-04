@@ -1,3 +1,4 @@
+#muzing的贪吃蛇
 class Point:
     row = 0
     col = 0
@@ -10,7 +11,6 @@ class Point:
 
 #初始框架
 import pygame
-from random import randrange
 from random import randint
 from time import perf_counter,sleep
 
@@ -189,7 +189,7 @@ while not quit:
         if head.col==body.col and head.row==body.row:
             dead=True
             break
-
+    #死亡
     if dead:
         time_end=perf_counter()
         game_time = int(round(time_end - time_start,0))
@@ -206,14 +206,22 @@ while not quit:
  \_____|\__,_|_| |_| |_|\___|  \____/  \_/ \___|_|    (_)
   ''')
         print("你的得分：" + str(score)+" 分")
+        #彩蛋1:禁止摸鱼！
         if score==0:
-            print("  嗯？ 0分？ 天秀")
+            print(" 嗯？ 0分？ 这里禁止摸鱼！")
         print("你已经玩了 "+str(game_time)+" 秒\n")
+        #彩蛋3：边边角角
+        if (head.row==0 or head.row==-1) and (head.col==COL or head.col==COL-1):
+            print("答应我，下一次当你想要关掉游戏的时候，用鼠标去点这个 X ，而不是用头去撞，好吗？\n")
+        #彩蛋2：你是来听歌的？
+        if game_time<352 and game_time>342:
+            print("曲终蛇亡，你是来听歌的？\n")
         input("按回车键退出\n")
         #sleep(1)
         quit=True
 
     #渲染——画出来
+
     #背景
     #以纯色填充
     #pygame.draw.rect(background,bg_coloe,(0,0,W,H))
@@ -230,5 +238,5 @@ while not quit:
         pygame.display.update()
 
 
-#设置帧频,随蛇长度增加，速度会越来越快
+    #设置帧频,随蛇长度增加，速度会越来越快
     clock.tick(10+(score/50))

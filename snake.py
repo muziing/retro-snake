@@ -50,6 +50,9 @@ pygame.mixer.music.play(1000,0.0) # 播放音乐
 end_sound = pygame.mixer.Sound("_A1#.wav") #载入音效（死亡）
 end_sound.set_volume(0.12)
 
+eat_sound = pygame.mixer.Sound("eat4.wav") #载入音效（吃东西）
+eat_sound.set_volume(0.12)
+
 #设置颜色
 head_color=(30,220,200)
 body_color=(200,240,200)
@@ -152,11 +155,11 @@ while not quit:
     #更新分数
     score = (len(bodys) -3)*10
 
-
     #吃东西
     eat=(head.row==food.row and head.col==food.col)
     #重新产生食物
     if eat:
+        eat_sound.play()
         food = gen_food()
 
     #处理身子
@@ -226,5 +229,6 @@ while not quit:
 
         pygame.display.update()
 
-    #设置帧频,随蛇长度增加，速度会越来越快
+
+#设置帧频,随蛇长度增加，速度会越来越快
     clock.tick(10+(score/50))

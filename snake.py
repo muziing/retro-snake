@@ -208,7 +208,7 @@ while not quit:
         print("你的得分：" + str(score)+" 分")
         #彩蛋1:禁止摸鱼！
         if score==0:
-            print(" 嗯？ 0分？ 这里禁止摸鱼！")
+            print("嗯？ 0分？ 这里禁止摸鱼！")
         print("你已经玩了 "+str(game_time)+" 秒\n")
         #彩蛋3：边边角角
         if (head.row==0 or head.row==-1) and (head.col==COL or head.col==COL-1):

@@ -6,6 +6,7 @@ from time import perf_counter, sleep
 
 
 class Point:
+    """定义格点类，游戏都是基于这种格点的"""
     row = 0
     col = 0
 
@@ -29,7 +30,7 @@ H = 600
 
 ROW = 30
 COL = 45
-size = (W, H)
+size = (W, H)  # 窗口大小
 
 # 导入背景图片
 background = pygame.image.load("image.jpg")
@@ -65,6 +66,7 @@ bodys = [
     Point(row=head.row, col=head.col + 1),
     Point(row=head.row, col=head.col + 2),
     Point(row=head.row, col=head.col + 3)
+    # 初始蛇身为蛇头向右的三个格
 ]
 
 
@@ -72,12 +74,12 @@ bodys = [
 def gen_food():
     while True:
         pos = Point(row=randint(0, ROW - 1), col=randint(0, COL - 1))
-        is_coll = False
-        # 是否和蛇头碰上
+        is_coll = False  # 标志，为True时生成新的食物
+        # 是否和蛇头碰上，碰上即为吃掉，再生成一个新的
         if head.row == pos.row and head.col == pos.col:
             is_coll = True
 
-        # 是否和蛇身碰上
+        # 检查是否和蛇身碰上，防止新生成的食物在当前蛇身的格点里
         for body in bodys:
             if body.row == pos.row and body.col == pos.col:
                 is_coll = True
@@ -89,10 +91,11 @@ def gen_food():
 
 food = gen_food()
 
-direct = 'left'  # left,right,up,down
+direct = 'left'  # 定义蛇初始运动方向为向左 还可选right,up,down
 
 
 def rect(point, color):
+    """调用pygame中绘制矩形的方法，绘制蛇"""
     cell_width = int(W / COL)
     cell_height = int(H / ROW)
     left = int(point.col * cell_width)
@@ -107,16 +110,15 @@ def rect(point, color):
 
 # 游戏循环
 
-
-quit = False
+quit_flag = False  # 设置一个标志，判断蛇是否死亡
 
 clock = pygame.time.Clock()
-while not quit:
+while not quit_flag:
     # 处理事件
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
-            quit = True
+            quit_flag = True
         # 用键盘控制 支持方向键和WSAD
         elif event.type == pygame.KEYDOWN:
             if (event.key == 273 or event.key == 119) and direct != 'down':
@@ -220,7 +222,7 @@ while not quit:
             print("曲终蛇亡，你是来听歌的？\n")
         input("按回车键退出\n")
         # sleep(1)
-        quit = True
+        quit_flag = True
 
     # 渲染——画出来
 

@@ -4,6 +4,45 @@ import pygame
 from random import randint
 from time import perf_counter, sleep
 
+# 初始化一些参数
+score = 0  # 初始得分为0
+
+W = 900  # 游戏窗口尺寸，单位为像素
+H = 600
+
+ROW = 30
+COL = 45
+size = (W, H)  # 窗口大小
+
+# 设置颜色
+head_color = (30, 220, 200)
+body_color = (200, 240, 200)
+food_color = (255, 105, 180)
+# 初始化
+pygame.init()
+pygame.mixer.init()
+pygame.joystick.init()
+
+
+# 导入背景图片
+background = pygame.image.load("image.jpg")
+window = pygame.display.set_mode(size, 0, 32)
+pygame.display.set_caption('muzing 的贪吃蛇')  # Pygame窗口标题
+
+# 若以纯色填充背景
+# bg_color=(254,254,245)
+
+
+pygame.mixer.music.load("bgm.mp3")  # 载入背景音乐
+pygame.mixer.music.set_volume(0.15)  # 设置音量为 0.15
+pygame.mixer.music.play(1000, 0.0)  # 播放音乐
+
+end_sound = pygame.mixer.Sound("_A1#.wav")  # 载入音效（死亡）
+end_sound.set_volume(0.12)
+
+eat_sound = pygame.mixer.Sound("eat4.wav")  # 载入音效（吃东西）
+eat_sound.set_volume(0.12)
+
 
 class Point:
     """定义格点类，游戏都是基于这种格点的"""
@@ -18,48 +57,6 @@ class Point:
         return Point(row=self.row, col=self.col)
 
 
-# 初始化
-pygame.init()
-pygame.mixer.init()
-pygame.joystick.init()
-
-score = 0
-
-W = 900
-H = 600
-
-ROW = 30
-COL = 45
-size = (W, H)  # 窗口大小
-
-# 导入背景图片
-background = pygame.image.load("image.jpg")
-window = pygame.display.set_mode(size, 0, 32)
-# Pygame窗口标题
-pygame.display.set_caption('muzing 的贪吃蛇')
-
-# 若以纯色填充背景
-# bg_color=(254,254,245)
-
-
-# 开始游戏计时
-time_start = perf_counter()
-
-pygame.mixer.music.load("bgm.mp3")  # 载入背景音乐
-pygame.mixer.music.set_volume(0.15)  # 设置音量为 0.15
-pygame.mixer.music.play(1000, 0.0)  # 播放音乐
-
-end_sound = pygame.mixer.Sound("_A1#.wav")  # 载入音效（死亡）
-end_sound.set_volume(0.12)
-
-eat_sound = pygame.mixer.Sound("eat4.wav")  # 载入音效（吃东西）
-eat_sound.set_volume(0.12)
-
-# 设置颜色
-head_color = (30, 220, 200)
-body_color = (200, 240, 200)
-food_color = (255, 105, 180)
-
 # 定义坐标
 head = Point(row=int(ROW / 2), col=int(COL / 2))
 bodys = [
@@ -70,8 +67,8 @@ bodys = [
 ]
 
 
-# 生成食物
 def gen_food():
+    """生成食物"""
     while True:
         pos = Point(row=randint(0, ROW - 1), col=randint(0, COL - 1))
         is_coll = False  # 标志，为True时生成新的食物
@@ -89,9 +86,7 @@ def gen_food():
     return pos
 
 
-food = gen_food()
-
-direct = 'left'  # 定义蛇初始运动方向为向左 还可选right,up,down
+food = gen_food()  # 先调用一次gen_food函数，生成第一个食物
 
 
 def rect(point, color):
@@ -108,11 +103,16 @@ def rect(point, color):
     pass
 
 
+direct = 'left'  # 定义蛇初始运动方向为向左 还可选right,up,down
+
 # 游戏循环
+
+time_start = perf_counter()  # 开始游戏计时
 
 quit_flag = False  # 设置一个标志，判断蛇是否死亡
 
-clock = pygame.time.Clock()
+clock = pygame.time.Clock()  # 设置游戏运行的帧率
+
 while not quit_flag:
     # 处理事件
     events = pygame.event.get()
@@ -163,15 +163,15 @@ while not quit_flag:
     eat = (head.row == food.row and head.col == food.col)
     # 重新产生食物
     if eat:
-        eat_sound.play()
-        food = gen_food()
+        eat_sound.play()  # 播放吃东西音效
+        food = gen_food()  # 生成新的事物
 
     # 处理身子
     # 1.把原来的头，插入到body的头上
     bodys.insert(0, head.copy())
     # 2.把 body 的最后一个删掉
     if not eat:
-        bodys.pop()
+        bodys.pop()  # 蛇每次移动，就是把蛇头移到新的格点，并把原来的蛇尾删去。这里从列表中把最后一个元素删去即可
 
     # 移动
     if direct == 'left':
@@ -218,15 +218,12 @@ while not quit_flag:
         if (head.row == 0 or head.row == -1) and (head.col == COL or head.col == COL - 1):
             print("答应我，下一次当你想要关掉游戏的时候，用鼠标去点这个 X ，而不是用头去撞，好吗？\n")
         # 彩蛋2：你是来听歌的？
-        if game_time < 352 and game_time > 342:
+        if 352 > game_time > 342:
             print("曲终蛇亡，你是来听歌的？\n")
         input("按回车键退出\n")
         # sleep(1)
         quit_flag = True
 
-    # 渲染——画出来
-
-    # 背景
     # 以纯色填充
     # pygame.draw.rect(background,bg_color,(0,0,W,H))
 
@@ -241,5 +238,4 @@ while not quit_flag:
 
         pygame.display.update()
 
-    # 设置帧频,随蛇长度增加，速度会越来越快
-    clock.tick(10 + (score / 50))
+    clock.tick(10 + (score / 50))  # 设置帧频,随蛇长度增加，速度会越来越快

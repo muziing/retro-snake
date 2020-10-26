@@ -1,6 +1,5 @@
 """初始化和加载资源相关代码"""
 import pygame
-from cfg import size
 
 pygame.init()
 pygame.mixer.init()

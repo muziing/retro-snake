@@ -17,24 +17,20 @@ class Point:
         return Point(row=self.row, col=self.col)
 
 
-class Block:
-    def __init__(self):
-        pass
+def rect(point, color, window):
+    """调用pygame中绘制矩形的方法，绘制蛇或食物方块"""
+    cell_width = int(W / COL)
+    cell_height = int(H / ROW)
+    left = int(point.col * cell_width)
+    top = int(point.row * cell_height)
 
-    def rect(self, point, color, window):
-        """调用pygame中绘制矩形的方法，绘制蛇或食物方块"""
-        cell_width = int(W / COL)
-        cell_height = int(H / ROW)
-        left = int(point.col * cell_width)
-        top = int(point.row * cell_height)
-
-        pygame.draw.rect(
-            window, color,
-            (left, top, cell_width, cell_height)
-        )
+    pygame.draw.rect(
+        window, color,
+        (left, top, cell_width, cell_height)
+    )
 
 
-class Snake(Block):
+class Snake:
     def __init__(self, head_pos=snake_head_pos, direct='left', head_clr=head_color, body_clr=body_color):
         super().__init__()
         self.head = Point(*head_pos)
@@ -75,14 +71,15 @@ class Snake(Block):
             self.direct = 'right'
 
     def draw(self, window):
-        self.rect(self.head, self.head_clr, window)
+        rect(self.head, self.head_clr, window)
         for body in self.bodies:
-            self.rect(body, self.body_clr, window)
+            rect(body, self.body_clr, window)
 
 
-class Food(Block):
-    def __init__(self, snake):
+class Food:
+    def __init__(self, snake, color=food_color):
         super().__init__()
+        self.color = color
         self.gen(snake)
 
     def gen(self, snake):
@@ -105,4 +102,7 @@ class Food(Block):
 
     def draw(self, window):
         """绘制食物"""
-        self.rect(self.pos, food_color, window)
+        rect(self.pos, food_color, window)
+
+    def set_color(self, new_color):
+        self.color = new_color

@@ -1,6 +1,6 @@
 from random import randint
 
-from cfg import *
+import cfg
 import pygame.rect
 
 
@@ -19,8 +19,8 @@ class Point:
 
 def rect(point, color, window):
     """调用pygame中绘制矩形的方法，绘制蛇或食物方块"""
-    cell_width = int(W / COL)
-    cell_height = int(H / ROW)
+    cell_width = int(cfg.W / cfg.COL)
+    cell_height = int(cfg.H / cfg.ROW)
     left = int(point.col * cell_width)
     top = int(point.row * cell_height)
 
@@ -31,7 +31,7 @@ def rect(point, color, window):
 
 
 class Snake:
-    def __init__(self, head_pos=snake_head_pos, direct='left', head_clr=head_color, body_clr=body_color):
+    def __init__(self, head_pos=cfg.snake_head_pos, direct='left', head_clr=cfg.head_color, body_clr=cfg.body_color):
         super().__init__()
         self.head = Point(*head_pos)
         head = self.head
@@ -77,7 +77,7 @@ class Snake:
 
 
 class Food:
-    def __init__(self, snake, color=food_color):
+    def __init__(self, snake, color=cfg.food_color):
         super().__init__()
         self.color = color
         self.gen(snake)
@@ -85,7 +85,7 @@ class Food:
     def gen(self, snake):
         """生成食物"""
         while True:
-            random_pos = Point(row=randint(0, ROW - 1), col=randint(0, COL - 1))  # 先生成一个随机点位
+            random_pos = Point(row=randint(0, cfg.ROW - 1), col=randint(0, cfg.COL - 1))  # 先生成一个随机点位
             is_coll = False  # 标志，为True时生成新的食物
             # 是否和蛇头碰上，碰上即为吃掉，再生成一个新的
             if snake.head.row == random_pos.row and snake.head.col == random_pos.col:
@@ -102,7 +102,7 @@ class Food:
 
     def draw(self, window):
         """绘制食物"""
-        rect(self.pos, food_color, window)
+        rect(self.pos, cfg.food_color, window)
 
     def set_color(self, new_color):
         self.color = new_color

@@ -1,23 +1,12 @@
 # muzing的贪吃蛇
 # 初始框架
+from cfg import *
 import pygame
 from random import randint
 from time import perf_counter, sleep
 
 # 初始化一些参数
 score = 0  # 初始得分为0
-
-W = 900  # 游戏窗口尺寸，单位为像素
-H = 600
-
-ROW = 30
-COL = 45
-size = (W, H)  # 窗口大小
-
-# 设置颜色
-head_color = (30, 220, 200)
-body_color = (200, 240, 200)
-food_color = (255, 105, 180)
 # 初始化
 pygame.init()
 pygame.mixer.init()
@@ -25,7 +14,7 @@ pygame.joystick.init()
 
 
 # 导入背景图片
-background = pygame.image.load("image.jpg")
+background = pygame.image.load("./resources/images/background_01.jpg")
 window = pygame.display.set_mode(size, 0, 32)
 pygame.display.set_caption('muzing 的贪吃蛇')  # Pygame窗口标题
 
@@ -33,14 +22,14 @@ pygame.display.set_caption('muzing 的贪吃蛇')  # Pygame窗口标题
 # bg_color=(254,254,245)
 
 
-pygame.mixer.music.load("bgm.mp3")  # 载入背景音乐
+pygame.mixer.music.load("./resources/audios/bgm.mp3")  # 载入背景音乐
 pygame.mixer.music.set_volume(0.15)  # 设置音量为 0.15
 pygame.mixer.music.play(1000, 0.0)  # 播放音乐
 
-end_sound = pygame.mixer.Sound("_A1#.wav")  # 载入音效（死亡）
+end_sound = pygame.mixer.Sound("./resources/audios/_A1#.wav")  # 载入音效（死亡）
 end_sound.set_volume(0.12)
 
-eat_sound = pygame.mixer.Sound("eat4.wav")  # 载入音效（吃东西）
+eat_sound = pygame.mixer.Sound("./resources/audios/eat4.wav")  # 载入音效（吃东西）
 eat_sound.set_volume(0.12)
 
 
@@ -100,7 +89,6 @@ def rect(point, color):
         window, color,
         (left, top, cell_width, cell_height)
     )
-    pass
 
 
 direct = 'left'  # 定义蛇初始运动方向为向左 还可选right,up,down
@@ -164,7 +152,7 @@ while not quit_flag:
     # 重新产生食物
     if eat:
         eat_sound.play()  # 播放吃东西音效
-        food = gen_food()  # 生成新的事物
+        food = gen_food()  # 生成新的食物
 
     # 处理身子
     # 1.把原来的头，插入到body的头上

@@ -1,48 +1,21 @@
 # muzing的贪吃蛇
 # 初始框架
 from sprites import *
-from cfg import *
-import pygame
-from random import randint
+import cfg
 from time import perf_counter, sleep
+from init_game import *
 
-# 初始化一些参数
-score = 0  # 初始得分为0
-# 初始化
-pygame.init()
-pygame.mixer.init()
-pygame.joystick.init()
+# 游戏主窗口
+window = pygame.display.set_mode(cfg.size, 0, 32)
 
-# 导入背景图片
-background = pygame.image.load("./resources/images/background_01.jpg")
-window = pygame.display.set_mode(size, 0, 32)
-pygame.display.set_caption('muzing 的贪吃蛇')  # Pygame窗口标题
-
-# 若以纯色填充背景
-# bg_color=(254,254,245)
-
-
-pygame.mixer.music.load("./resources/audios/bgm.mp3")  # 载入背景音乐
-pygame.mixer.music.set_volume(0.15)  # 设置音量为 0.15
-pygame.mixer.music.play(1000, 0.0)  # 播放音乐
-
-end_sound = pygame.mixer.Sound("./resources/audios/_A1#.wav")  # 载入音效（死亡）
-end_sound.set_volume(0.12)
-
-eat_sound = pygame.mixer.Sound("./resources/audios/eat4.wav")  # 载入音效（吃东西）
-eat_sound.set_volume(0.12)
-
-# 定义坐标
+# 创建蛇、食物实例
 snake1 = Snake()
 food1 = Food(snake1)
 
 # 游戏循环
-
-time_start = perf_counter()  # 开始游戏计时
-
 quit_flag = False  # 设置一个标志，判断蛇是否死亡
-
 clock = pygame.time.Clock()  # 设置游戏运行的帧率
+time_start = perf_counter()  # 开始游戏计时
 
 while not quit_flag:
     # 处理事件
@@ -110,7 +83,7 @@ while not quit_flag:
     # 检测
     dead = False
     # 1.撞墙
-    if snake1.head.col < 0 or snake1.head.col > COL - 1 or snake1.head.row < 0 or snake1.head.row > ROW - 1:
+    if snake1.head.col < 0 or snake1.head.col > cfg.COL - 1 or snake1.head.row < 0 or snake1.head.row > cfg.ROW - 1:
         dead = True
     # 2.撞自己
     for body in snake1.bodies:
@@ -139,7 +112,7 @@ while not quit_flag:
             print("嗯？ 0分？ 这里禁止摸鱼！")
         print("你已经玩了 " + str(game_time) + " 秒\n")
         # 彩蛋3：边边角角
-        if (snake1.head.row == 0 or snake1.head.row == -1) and (snake1.head.col == COL or snake1.head.col == COL - 1):
+        if (snake1.head.row == 0 or snake1.head.row == -1) and (snake1.head.col == cfg.COL or snake1.head.col == cfg.COL - 1):
             print("答应我，下一次当你想要关掉游戏的时候，用鼠标去点这个 X ，而不是用头去撞，好吗？\n")
         # 彩蛋2：你是来听歌的？
         if 352 > game_time > 342:
@@ -153,10 +126,10 @@ while not quit_flag:
 
     # 以背景图片填充
     if not dead:
-        window.blit(background, (0, 0))
+        window.blit(GamingBackground, (0, 0))
         snake1.draw(window)
         food1.draw(window)
 
         pygame.display.update()
 
-    clock.tick(FPS + (score / 50))  # 设置帧频,随蛇长度增加，速度会越来越快
+    clock.tick(cfg.FPS + (score / 50))  # 设置帧频,随蛇长度增加，速度会越来越快

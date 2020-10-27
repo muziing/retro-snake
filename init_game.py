@@ -2,11 +2,12 @@
 import pygame
 
 pygame.init()
-pygame.mixer.init()
+# pygame.mixer.init()
 # pygame.joystick.init()
 
 # 导入背景图片
 GamingBackground = pygame.image.load("./resources/images/background_01.jpg")
+StartingBackground = pygame.image.load("./resources/images/start.jpg")
 pygame.display.set_caption('muzing 的贪吃蛇')  # Pygame窗口标题
 
 # 若以纯色填充背景

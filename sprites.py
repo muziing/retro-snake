@@ -75,6 +75,9 @@ class Snake:
         for body in self.bodies:
             rect(body, self.body_clr, window)
 
+    def __len__(self):
+        return len(self.bodies)
+
 
 class Food:
     def __init__(self, snake, color=cfg.food_color):

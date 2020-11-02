@@ -13,6 +13,7 @@ window = pygame.display.set_mode(cfg.size, 0, 32)
 snake1 = Snake()
 food1 = Food(snake1)
 
+
 def game_main_loop():
     # 游戏循环
     quit_flag = False  # 设置一个标志，判断蛇是否死亡
@@ -30,7 +31,7 @@ def game_main_loop():
             if keys[pygame.K_UP] or keys[pygame.K_w]:
                 snake1.turn('up')
             elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-                 snake1.turn('down')
+                snake1.turn('down')
             elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
                 snake1.turn('left')
             elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
@@ -63,7 +64,7 @@ def game_main_loop():
                         snake1.turn('right')
 
         # 更新分数
-        score = (len(snake1.bodies) - 3) * 10
+        score = (len(snake1) - 3) * 10
 
         # 吃东西
         eat = (snake1.head.row == food1.pos.row and snake1.head.col == food1.pos.col)
@@ -114,7 +115,8 @@ def game_main_loop():
                 print("嗯？ 0分？ 这里禁止摸鱼！")
             print("你已经玩了 " + str(game_time) + " 秒\n")
             # 彩蛋3：边边角角
-            if (snake1.head.row == 0 or snake1.head.row == -1) and (snake1.head.col == cfg.COL or snake1.head.col == cfg.COL - 1):
+            if (snake1.head.row == 0 or snake1.head.row == -1) and (
+                    snake1.head.col == cfg.COL or snake1.head.col == cfg.COL - 1):
                 print("答应我，下一次当你想要关掉游戏的时候，用鼠标去点这个 X ，而不是用头去撞，好吗？\n")
             # 彩蛋2：你是来听歌的？
             if 352 > game_time > 342:
@@ -135,6 +137,7 @@ def game_main_loop():
             pygame.display.update()
 
         clock.tick(cfg.FPS + (score / 50))  # 设置帧频,随蛇长度增加，速度会越来越快
+
 
 start_flag = True
 StartGame.start_game(start_flag, window)
